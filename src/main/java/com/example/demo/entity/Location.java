@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.demo.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,9 +15,8 @@ import lombok.Data;
 public class Location {
 
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue (strategy=GenerationType.IDENTITY)
+    private Long location_id;
     @Column(nullable = false, updatable = false)
     private String continent;
 

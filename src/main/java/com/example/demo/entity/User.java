@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.demo.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.example.entity.enums.Role;
+import com.example.demo.enums.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -25,21 +25,20 @@ import org.springframework.security.core.GrantedAuthority;
 public class User {
 
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(unique = true, nullable = false,updatable = true)
+    @GeneratedValue (strategy=GenerationType.IDENTITY)
+    private Long user_id;
+    @Column(unique = true, nullable = false)
     private String name;
     @Column(nullable = false)
     private String lastName;
-    @Column(unique = true)
+    @Column(nullable = false)
     private String email;
-    @Column(length = 3000)
+    @Column(nullable = false)
     private String password;
 
     @ElementCollection(targetClass = Role.class)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    private Set<Role> role = new HashSet<>();
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    private Set<Role> roles = new HashSet<>();
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
@@ -47,17 +46,4 @@ public class User {
     public User(){
 
     }
-
-    public User(Long id,
-                String name,
-                String email,
-                String password,
-                Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.authorities = authorities;
-    }
-
 }

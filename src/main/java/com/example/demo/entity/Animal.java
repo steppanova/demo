@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.demo.entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import com.example.entity.enums.Kind;
+import com.example.demo.enums.Kind;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -29,22 +29,23 @@ import lombok.Data;
 public class Animal {
 
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(unique = true, updatable = true)
+    @GeneratedValue (strategy=GenerationType.IDENTITY)
+    private Long animal_id;
+    @Column(unique = true)
     private String name;
     @Column(nullable = false)
     private String location;
-    @Column(updatable = false)
+    @Column(nullable = false,updatable = false)
     private Integer age;
-    @Column(updatable = true)
+    @Column(nullable = false)
     private Integer population;
-    @Column(updatable = true)
+    @Column
     private Integer likes;
     @JsonFormat(pattern = "yyyy-dd-mm")
-    @Column(updatable = false)
+    @Column(nullable = false,updatable = false)
     private LocalDateTime createdDate;
+    @Column(nullable = false)
+    private String imageLink;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -66,6 +67,5 @@ public class Animal {
     }
 
     public Animal(){
-
     }
 }
