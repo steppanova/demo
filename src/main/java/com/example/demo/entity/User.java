@@ -15,29 +15,31 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.example.demo.enums.Role;
+import com.example.demo.entity.enums.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue (strategy=GenerationType.IDENTITY)
-    private Long user_id;
-    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    @Column(updatable = false)
     private String name;
+    @Column(updatable = false)
+    private String username;
     @Column(nullable = false)
-    private String lastName;
-    @Column(nullable = false)
+    private String lastname;
+    @Column(unique = true)
     private String email;
     @Column(nullable = false)
     private String password;
 
     @ElementCollection(targetClass = Role.class)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     private Set<Role> roles = new HashSet<>();
 
     @Transient
@@ -46,4 +48,5 @@ public class User {
     public User(){
 
     }
+
 }

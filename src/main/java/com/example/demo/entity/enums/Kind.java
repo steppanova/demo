@@ -1,4 +1,4 @@
-package com.example.demo.enums;
+package com.example.demo.entity.enums;
 
 public enum Kind {
     MAMMAL,
