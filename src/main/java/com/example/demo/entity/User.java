@@ -18,19 +18,20 @@ import javax.persistence.Transient;
 import com.example.demo.entity.enums.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(updatable = false)
-    private String name;
-    @Column(updatable = false)
     private String username;
+    @Column(updatable = false)
+    private String firstname;
     @Column(nullable = false)
     private String lastname;
     @Column(unique = true)
@@ -45,8 +46,45 @@ public class User {
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 
-    public User(){
+    public User() {
 
     }
 
+    public User(final Long id, final String username, final String email, final String password,
+                final Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
+    /**
+     * Security
+     */
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
