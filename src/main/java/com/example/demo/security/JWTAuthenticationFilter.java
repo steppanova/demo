@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-public class JWMAuthenticationFilter extends OncePerRequestFilter {
-    public static final Logger LOG = LoggerFactory.getLogger(JWMAuthenticationFilter.class);
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
+    public static final Logger LOG = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
