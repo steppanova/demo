@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoo Dashboard - Locations</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <style>
+        /* Include the same styles as dashboard.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        nav {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+        nav .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        nav .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        nav .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        nav .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            display: flex;
+            gap: 0;
+        }
+
+        aside {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            min-height: calc(100vh - 60px);
+        }
+
+        aside ul {
+            list-style: none;
+        }
+
+        aside li {
+            padding: 0;
+        }
+
+        aside a {
+            display: block;
+            padding: 1rem 2rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        aside a:hover {
+            background: #f5f7fa;
+            border-left-color: #667eea;
+            color: #667eea;
+        }
+
+        aside a.active {
+            background: #f5f7fa;
+            border-left-color: #667eea;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            font-size: 32px;
+            opacity: 0.8;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 1rem;
+        }
+
+        .card-footer {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid #667eea;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .location-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .location-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+        }
+
+        .location-content {
+            padding: 1.5rem;
+        }
+
+        .location-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .location-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 1rem;
+        }
+
+        .location-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .animals-count {
+            background: #f5f7fa;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .location-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .map-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 2rem;
+        }
+
+        .map {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            nav .nav-links {
+                gap: 1rem;
+                font-size: 14px;
+            }
+
+            aside {
+                width: 200px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                flex-direction: column;
+            }
+
+            aside {
+                width: 100%;
+                min-height: auto;
+            }
+
+            nav .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            🦁 Zoo Application
+        </div>
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Animals</a></li>
+            <li><a href="locations.html">Locations</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+        <div class="user-menu">
+            <span id="username">User</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside>
+            <ul>
+                <li><a href="dashboard.html">🦁 Animals</a></li>
+                <li><a href="locations.html" class="active">📍 Locations</a></li>
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="profile.html">👤 Profile</a></li>
+                <li><a href="#">⚙️ Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>📍 Locations</h1>
+                <p>Manage all zoo locations and zones</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Total Locations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">42</div>
+                    <div class="stat-label">Total Animals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">95%</div>
+                    <div class="stat-label">Capacity Used</div>
+                </div>
+            </div>
+
+            <!-- Location Cards -->
+            <h2 style="margin: 2rem 0 1rem 0; color: #333;">Zoo Locations</h2>
+            <div class="cards-grid">
+                <div class="location-card">
+                    <div class="location-image">🌍</div>
+                    <div class="location-content">
+                        <div class="location-name">Savanna Zone</div>
+                        <div class="location-info">
+                            <p><strong>Area:</strong> 5,000 m²</p>
+                            <p><strong>Climate:</strong> Hot & Dry</p>
+                        </div>
+                        <div class="animals-count">🦁 12 Animals</div>
+                        <div class="location-actions">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-secondary">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-image">🌴</div>
+                    <div class="location-content">
+                        <div class="location-name">Jungle Zone</div>
+                        <div class="location-info">
+                            <p><strong>Area:</strong> 4,500 m²</p>
+                            <p><strong>Climate:</strong> Tropical</p>
+                        </div>
+                        <div class="animals-count">🐵 8 Animals</div>
+                        <div class="location-actions">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-secondary">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-image">🌊</div>
+                    <div class="location-content">
+                        <div class="location-name">Aquatic Zone</div>
+                        <div class="location-info">
+                            <p><strong>Area:</strong> 3,000 m²</p>
+                            <p><strong>Climate:</strong> Aquatic</p>
+                        </div>
+                        <div class="animals-count">🐬 6 Animals</div>
+                        <div class="location-actions">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-secondary">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-image">❄️</div>
+                    <div class="location-content">
+                        <div class="location-name">Ice Zone</div>
+                        <div class="location-info">
+                            <p><strong>Area:</strong> 2,500 m²</p>
+                            <p><strong>Climate:</strong> Cold</p>
+                        </div>
+                        <div class="animals-count">🐧 5 Animals</div>
+                        <div class="location-actions">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-secondary">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-image">🌲</div>
+                    <div class="location-content">
+                        <div class="location-name">Forest Zone</div>
+                        <div class="location-info">
+                            <p><strong>Area:</strong> 6,000 m²</p>
+                            <p><strong>Climate:</strong> Temperate</p>
+                        </div>
+                        <div class="animals-count">🦌 7 Animals</div>
+                        <div class="location-actions">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-secondary">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-image">🏔️</div>
+                    <div class="location-content">
+                        <div class="location-name">Mountain Zone</div>
+                        <div class="location-info">
+                            <p><strong>Area:</strong> 3,500 m²</p>
+                            <p><strong>Climate:</strong> Alpine</p>
+                        </div>
+                        <div class="animals-count">🦅 4 Animals</div>
+                        <div class="location-actions">
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-secondary">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zoo Map -->
+            <div class="map-container">
+                <h2 style="margin-bottom: 1rem; color: #333;">Zoo Map</h2>
+                <div class="map">
+                    🗺️ Interactive Zoo Map (Map integration here)
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check if user is authenticated
+        window.addEventListener('load', function() {
+            const token = localStorage.getItem('jwtToken');
+            const username = localStorage.getItem('username');
+
+            if (!token || !username) {
+                // Not authenticated - redirect to login
+                window.location.href = '/index.html';
+                return;
+            }
+
+            // Display username
+            document.getElementById('username').textContent = username;
+        });
+
+        function logout() {
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('username');
+            window.location.href = '/index.html';
+        }
+    </script>
+</body>
+</html>
+

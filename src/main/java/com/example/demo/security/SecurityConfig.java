@@ -41,7 +41,7 @@ public class SecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/", "/index.html", "/static/**", "/resources/**").permitAll()
+            .antMatchers("/", "/*.html", "/static/**", "/resources/**", "/signup.html", "/dashboard.html", "/locations.html", "/profile.html").permitAll()
             .antMatchers(SecurityConstants.SIGN_UP_URLS).permitAll()
             .anyRequest().authenticated();
 

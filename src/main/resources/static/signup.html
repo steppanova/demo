@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoo Application - Sign Up</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .progress-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-step {
+            flex: 1;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active {
+            background: #667eea;
+        }
+
+        .progress-step.completed {
+            background: #4caf50;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: slideIn 0.3s ease-in;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+        }
+
+        .checkbox-item label,
+        .radio-item label {
+            margin-bottom: 0;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 12px;
+        }
+
+        .strength-meter {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-bottom: 0.25rem;
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            background: #f44336;
+            transition: all 0.3s;
+        }
+
+        .strength-bar.weak {
+            width: 33%;
+            background: #f44336;
+        }
+
+        .strength-bar.fair {
+            width: 66%;
+            background: #ff9800;
+        }
+
+        .strength-bar.strong {
+            width: 100%;
+            background: #4caf50;
+        }
+
+        .strength-text {
+            color: #666;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef5350;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #66bb6a;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #42a5f5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            font-size: 14px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 1rem;
+        }
+
+        .success-message h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-message p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-number {
+            background: #667eea;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #4caf50;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #667eea;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .step-indicator {
+                padding: 0;
+            }
+
+            .step-label {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- Header -->
+            <div class="header">
+                <h1>🦁 Zoo Application</h1>
+                <p>Create your account</p>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Alert Messages -->
+                <div class="alert alert-error" id="errorAlert"></div>
+                <div class="alert alert-success" id="successAlert"></div>
+                <div class="alert alert-info" id="infoAlert"></div>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-step active" id="step1-progress"></div>
+                    <div class="progress-step" id="step2-progress"></div>
+                    <div class="progress-step" id="step3-progress"></div>
+                </div>
+
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" id="step1-indicator">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Personal</div>
+                    </div>
+                    <div class="step" id="step2-indicator">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Account</div>
+                    </div>
+                    <div class="step" id="step3-indicator">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Confirm</div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form id="signupForm">
+                    <!-- Step 1: Personal Information -->
+                    <div class="form-section active" id="step1">
+                        <h2 class="section-title">📋 Personal Information</h2>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="birthDate">Date of Birth (Optional)</label>
+                            <input type="date" id="birthDate" name="birthDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Interest in Animals</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="interest1" name="interests" value="educational">
+                                    <label for="interest1">Educational</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="interest2" name="interests" value="conservation">
+                                    <label for="interest2">Conservation</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="interest3" name="interests" value="entertainment">
+                                    <label for="interest3">Entertainment</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="interest4" name="interests" value="research">
+                                    <label for="interest4">Research</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Account Information -->
+                    <div class="form-section" id="step2">
+                        <h2 class="section-title">🔐 Account Information</h2>
+
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="johndoe" minlength="3" required>
+                            <small style="color: #999; display: block; margin-top: 0.25rem;">3-20 characters, no spaces</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Min 6 characters" minlength="6" required oninput="checkPasswordStrength()">
+                            <div class="password-strength">
+                                <div class="strength-meter">
+                                    <div class="strength-bar" id="strengthBar"></div>
+                                </div>
+                                <div class="strength-text" id="strengthText">Enter a password</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="role">User Role</label>
+                            <select id="role" name="role" required>
+                                <option value="">Select a role</option>
+                                <option value="visitor">Visitor</option>
+                                <option value="member">Member</option>
+                                <option value="volunteer">Volunteer</option>
+                                <option value="staff">Staff</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Confirmation -->
+                    <div class="form-section" id="step3">
+                        <h2 class="section-title">✅ Review & Confirm</h2>
+
+                        <div style="background: #f5f7fa; padding: 1.5rem; border-radius: 5px; margin-bottom: 1.5rem;">
+                            <h3 style="color: #333; margin-bottom: 1rem;">Account Summary</h3>
+
+                            <div style="margin-bottom: 1rem;">
+                                <strong style="color: #666;">Personal Information:</strong>
+                                <p style="color: #666; font-size: 14px; margin-top: 0.25rem;">
+                                    <span id="review-name"></span><br>
+                                    <span id="review-email"></span>
+                                </p>
+                            </div>
+
+                            <div style="margin-bottom: 1rem;">
+                                <strong style="color: #666;">Account Details:</strong>
+                                <p style="color: #666; font-size: 14px; margin-top: 0.25rem;">
+                                    Username: <span id="review-username"></span><br>
+                                    Role: <span id="review-role"></span>
+                                </p>
+                            </div>
+
+                            <div>
+                                <strong style="color: #666;">Interests:</strong>
+                                <p style="color: #666; font-size: 14px; margin-top: 0.25rem;" id="review-interests">
+                                    No interests selected
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <label for="terms">I agree to the <a href="#" style="color: #667eea;">Terms of Service</a> and <a href="#" style="color: #667eea;">Privacy Policy</a></label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="newsletter" name="newsletter">
+                                <label for="newsletter">Subscribe to our newsletter</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        Creating your account...
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">← Back</button>
+                        <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">Next →</button>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div class="success-message" id="successMessage">
+                        <div class="success-icon">🎉</div>
+                        <h2>Welcome to Zoo Application!</h2>
+                        <p>Your account has been created successfully.</p>
+                        <p style="color: #999; font-size: 13px;">Redirecting to login page...</p>
+                    </div>
+                </form>
+
+                <!-- Login Link -->
+                <div class="login-link" id="loginLink">
+                    Already have an account? <a href="/index.html">Login here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function changeStep(direction) {
+            if (direction > 0) {
+                if (!validateStep(currentStep)) {
+                    return;
+                }
+            }
+
+            if (currentStep + direction > 0 && currentStep + direction <= totalSteps) {
+                currentStep += direction;
+                showStep(currentStep);
+            } else if (currentStep + direction > totalSteps) {
+                submitForm();
+            }
+        }
+
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show current step
+            document.getElementById('step' + step).classList.add('active');
+
+            // Update buttons
+            document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'block';
+            document.getElementById('nextBtn').textContent = step === totalSteps ? 'Create Account' : 'Next →';
+
+            // Update progress
+            updateProgress();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress() {
+            for (let i = 1; i <= totalSteps; i++) {
+                const progressStep = document.getElementById('step' + i + '-progress');
+                const indicator = document.getElementById('step' + i + '-indicator');
+
+                progressStep.classList.remove('active', 'completed');
+                indicator.classList.remove('active', 'completed');
+
+                if (i < currentStep) {
+                    progressStep.classList.add('completed');
+                    indicator.classList.add('completed');
+                } else if (i === currentStep) {
+                    progressStep.classList.add('active');
+                    indicator.classList.add('active');
+                }
+            }
+        }
+
+        function validateStep(step) {
+            clearAlerts();
+
+            if (step === 1) {
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('email').value.trim();
+
+                if (!firstName) {
+                    showAlert('errorAlert', 'Please enter your first name');
+                    return false;
+                }
+
+                if (!lastName) {
+                    showAlert('errorAlert', 'Please enter your last name');
+                    return false;
+                }
+
+                if (!email) {
+                    showAlert('errorAlert', 'Please enter your email');
+                    return false;
+                }
+
+                if (!isValidEmail(email)) {
+                    showAlert('errorAlert', 'Please enter a valid email address');
+                    return false;
+                }
+
+                updateReview();
+            } else if (step === 2) {
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const role = document.getElementById('role').value;
+
+                if (!username) {
+                    showAlert('errorAlert', 'Please enter a username');
+                    return false;
+                }
+
+                if (username.length < 3) {
+                    showAlert('errorAlert', 'Username must be at least 3 characters');
+                    return false;
+                }
+
+                if (!password) {
+                    showAlert('errorAlert', 'Please enter a password');
+                    return false;
+                }
+
+                if (password.length < 6) {
+                    showAlert('errorAlert', 'Password must be at least 6 characters');
+                    return false;
+                }
+
+                if (password !== confirmPassword) {
+                    showAlert('errorAlert', 'Passwords do not match');
+                    return false;
+                }
+
+                if (!role) {
+                    showAlert('errorAlert', 'Please select a role');
+                    return false;
+                }
+
+                updateReview();
+            } else if (step === 3) {
+                const terms = document.getElementById('terms').checked;
+
+                if (!terms) {
+                    showAlert('errorAlert', 'Please accept the terms and conditions');
+                    return false;
+                }
+
+                updateReview();
+            }
+
+            return true;
+        }
+
+        function updateReview() {
+            document.getElementById('review-name').textContent =
+                document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value;
+            document.getElementById('review-email').textContent =
+                document.getElementById('email').value;
+            document.getElementById('review-username').textContent =
+                document.getElementById('username').value;
+            document.getElementById('review-role').textContent =
+                document.getElementById('role').options[document.getElementById('role').selectedIndex].text;
+
+            const interests = Array.from(document.querySelectorAll('input[name="interests"]:checked'))
+                .map(cb => cb.nextElementSibling.textContent)
+                .join(', ');
+            document.getElementById('review-interests').textContent =
+                interests || 'No interests selected';
+        }
+
+        function submitForm() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('prevBtn').disabled = true;
+
+            setTimeout(() => {
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('loginLink').style.display = 'none';
+
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 2000);
+            }, 1500);
+        }
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+
+            strengthBar.className = 'strength-bar';
+
+            if (password.length === 0) {
+                strengthText.textContent = 'Enter a password';
+                return;
+            }
+
+            let strength = 0;
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+            if (strength <= 2) {
+                strengthBar.classList.add('weak');
+                strengthText.textContent = 'Weak password';
+            } else if (strength <= 3) {
+                strengthBar.classList.add('fair');
+                strengthText.textContent = 'Fair password';
+            } else {
+                strengthBar.classList.add('strong');
+                strengthText.textContent = 'Strong password';
+            }
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function showAlert(elementId, message) {
+            const alert = document.getElementById(elementId);
+            alert.textContent = message;
+            alert.style.display = 'block';
+        }
+
+        function clearAlerts() {
+            document.getElementById('errorAlert').style.display = 'none';
+            document.getElementById('successAlert').style.display = 'none';
+            document.getElementById('infoAlert').style.display = 'none';
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
+

@@ -249,63 +249,11 @@
                 </div>
 
                 <div class="toggle-form">
-                    Don't have an account? <a onclick="toggleForm()">Sign up here</a>
+                    Don't have an account? <a href="signup.html">Sign up here</a>
                 </div>
             </div>
 
-            <!-- Signup Form -->
-            <div id="signupForm">
-                <div class="header">
-                    <h1>🦁 Zoo App</h1>
-                    <p>Create new account</p>
-                </div>
-
-                <div class="alert alert-success" id="signupSuccessAlert"></div>
-                <div class="alert alert-error" id="signupErrorAlert"></div>
-
-                <form onsubmit="handleSignup(event)" class="form-container">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" name="firstName" placeholder="John" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="signupUsername">Username</label>
-                        <input type="text" id="signupUsername" name="username" placeholder="johndoe" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="signupEmail">Email</label>
-                        <input type="email" id="signupEmail" name="email" placeholder="john@example.com" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="signupPassword">Password</label>
-                        <input type="password" id="signupPassword" name="password" placeholder="Min 6 characters" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
-                    </div>
-
-                    <div class="loading" id="signupLoading">
-                        ⏳ Creating account...
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" id="signupBtn">Sign Up</button>
-                </form>
-
-                <div class="toggle-form">
-                    Already have an account? <a onclick="toggleForm()">Login here</a>
-                </div>
-            </div>
+            <!-- Signup Form Removed - Now on signup.html -->
         </div>
     </div>
 
@@ -366,7 +314,7 @@
                         token = token.substring(7);
                     }
 
-                    showAlert('successAlert', '✅ Login successful! See your token below.', 'success');
+                    showAlert('successAlert', '✅ Login successful! Redirecting...', 'success');
 
                     // Display token info
                     document.getElementById('tokenDisplay').textContent = token;
@@ -379,6 +327,11 @@
                     // Clear form
                     document.getElementById('loginUsername').value = '';
                     document.getElementById('loginPassword').value = '';
+
+                    // Redirect to dashboard after 1 second
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 1000);
                 } else {
                     showAlert('errorAlert', '❌ Login failed: Invalid username or password', 'error');
                 }

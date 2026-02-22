@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoo Dashboard - Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        nav {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+        nav .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        nav .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        nav .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        nav .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            display: flex;
+            gap: 0;
+        }
+
+        aside {
+            width: 250px;
+            background: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            min-height: calc(100vh - 60px);
+        }
+
+        aside ul {
+            list-style: none;
+        }
+
+        aside li {
+            padding: 0;
+        }
+
+        aside a {
+            display: block;
+            padding: 1rem 2rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        aside a:hover {
+            background: #f5f7fa;
+            border-left-color: #667eea;
+            color: #667eea;
+        }
+
+        aside a.active {
+            background: #f5f7fa;
+            border-left-color: #667eea;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .profile-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 1rem;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .profile-content {
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            position: relative;
+            top: 2px;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            margin-left: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-danger:hover {
+            background: #f5c6cb;
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .info-value {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .activity-item {
+            padding: 1rem;
+            border-left: 3px solid #667eea;
+            background: #f9f9f9;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+        }
+
+        .activity-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-action {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-details {
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            aside {
+                width: 200px;
+            }
+
+            main {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                flex-direction: column;
+            }
+
+            aside {
+                width: 100%;
+                min-height: auto;
+            }
+
+            nav .nav-links {
+                display: none;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            🦁 Zoo Application
+        </div>
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Animals</a></li>
+            <li><a href="locations.html">Locations</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+        <div class="user-menu">
+            <span id="username">User</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside>
+            <ul>
+                <li><a href="dashboard.html">🦁 Animals</a></li>
+                <li><a href="locations.html">📍 Locations</a></li>
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="profile.html" class="active">👤 Profile</a></li>
+                <li><a href="#">⚙️ Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>👤 My Profile</h1>
+                <p>Manage your account settings and preferences</p>
+            </div>
+
+            <!-- Profile Container -->
+            <div class="profile-container">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-name" id="profileName">John Doe</div>
+                    <div class="profile-email" id="profileEmail">john@example.com</div>
+                </div>
+
+                <!-- Profile Content -->
+                <div class="profile-content">
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+                        <button class="tab-btn" onclick="switchTab('edit')">Edit Profile</button>
+                        <button class="tab-btn" onclick="switchTab('security')">Security</button>
+                        <button class="tab-btn" onclick="switchTab('activity')">Activity</button>
+                    </div>
+
+                    <!-- Overview Tab -->
+                    <div id="overview" class="tab-content active">
+                        <h2 style="margin-bottom: 1rem; color: #333;">Account Information</h2>
+                        <div class="info-section">
+                            <div class="info-item">
+                                <div>
+                                    <div class="info-label">Username</div>
+                                    <div class="info-value">johndoe</div>
+                                </div>
+                                <span class="badge">Active</span>
+                            </div>
+                            <div class="info-item">
+                                <div>
+                                    <div class="info-label">Email</div>
+                                    <div class="info-value">john@example.com</div>
+                                </div>
+                                <span class="badge">Verified</span>
+                            </div>
+                            <div class="info-item">
+                                <div>
+                                    <div class="info-label">Role</div>
+                                    <div class="info-value">Administrator</div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div>
+                                    <div class="info-label">Member Since</div>
+                                    <div class="info-value">February 22, 2026</div>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div>
+                                    <div class="info-label">Last Login</div>
+                                    <div class="info-value">Today at 11:30 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Profile Tab -->
+                    <div id="edit" class="tab-content">
+                        <h2 style="margin-bottom: 1rem; color: #333;">Edit Profile</h2>
+                        <form onsubmit="saveProfile(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" value="John" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" value="Doe" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" value="john@example.com" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" value="johndoe" disabled>
+                                <small style="color: #999;">Username cannot be changed</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bio">Bio</label>
+                                <textarea id="bio" rows="4" placeholder="Tell us about yourself...">Passionate about animals and wildlife conservation</textarea>
+                            </div>
+
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="reset" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div id="security" class="tab-content">
+                        <h2 style="margin-bottom: 1rem; color: #333;">Security Settings</h2>
+
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="margin-bottom: 1rem; color: #333;">Change Password</h3>
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" placeholder="Enter your current password">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" placeholder="Enter new password (min 6 characters)">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                            </div>
+                            <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+                        </div>
+
+                        <div style="margin-bottom: 2rem; padding: 1rem; background: #f9f9f9; border-radius: 5px;">
+                            <h3 style="margin-bottom: 1rem; color: #333;">Active Sessions</h3>
+                            <div class="info-item">
+                                <div>
+                                    <div class="info-label">Current Session</div>
+                                    <div class="info-value">Chrome on Windows</div>
+                                </div>
+                                <span class="badge">Active</span>
+                            </div>
+                        </div>
+
+                        <div style="padding: 1rem; background: #fff3cd; border-radius: 5px;">
+                            <h3 style="margin-bottom: 1rem; color: #333;">Danger Zone</h3>
+                            <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+                            <small style="display: block; margin-top: 0.5rem; color: #666;">This action cannot be undone</small>
+                        </div>
+                    </div>
+
+                    <!-- Activity Tab -->
+                    <div id="activity" class="tab-content">
+                        <h2 style="margin-bottom: 1rem; color: #333;">Recent Activity</h2>
+
+                        <div class="activity-item">
+                            <div class="activity-date">Today at 11:30 AM</div>
+                            <div class="activity-action">✅ Logged in</div>
+                            <div class="activity-details">Login from Chrome on Windows</div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-date">Yesterday at 3:45 PM</div>
+                            <div class="activity-action">📝 Created animal</div>
+                            <div class="activity-details">Added Lion to Savanna Zone</div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-date">Yesterday at 2:20 PM</div>
+                            <div class="activity-action">✏️ Updated location</div>
+                            <div class="activity-details">Modified Jungle Zone settings</div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-date">2 days ago at 10:15 AM</div>
+                            <div class="activity-action">🔐 Changed password</div>
+                            <div class="activity-details">Security update</div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-date">February 22, 2026 at 8:00 AM</div>
+                            <div class="activity-action">✅ Account created</div>
+                            <div class="activity-details">New account registered</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check if user is authenticated
+        window.addEventListener('load', function() {
+            const token = localStorage.getItem('jwtToken');
+            const username = localStorage.getItem('username');
+
+            if (!token || !username) {
+                // Not authenticated - redirect to login
+                window.location.href = '/index.html';
+                return;
+            }
+
+            // Display username
+            document.getElementById('username').textContent = username;
+        });
+
+        function logout() {
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('username');
+            window.location.href = '/index.html';
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Activate corresponding button
+            event.target.classList.add('active');
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            alert('Profile updated successfully!');
+        }
+
+        function changePassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPwd = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+
+            if (!current || !newPwd || !confirm) {
+                alert('Please fill all password fields');
+                return;
+            }
+
+            if (newPwd !== confirm) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            if (newPwd.length < 6) {
+                alert('Password must be at least 6 characters');
+                return;
+            }
+
+            alert('Password changed successfully!');
+        }
+
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                alert('Account deleted');
+                window.location.href = '/index.html';
+            }
+        }
+    </script>
+</body>
+</html>
+
