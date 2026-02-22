@@ -6,12 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,8 +39,8 @@ public class Animal {
     @JsonFormat(pattern = "yyyy-dd-mm")
     @Column(nullable = false,updatable = false)
     private LocalDateTime createdDate;
-    @Column(nullable = false)
-    private String imageLink;
+    @Column(columnDefinition = "bytea")
+    private byte[] imageBytes;
 
     @Column
     @ElementCollection(targetClass = String.class)

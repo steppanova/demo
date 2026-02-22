@@ -307,33 +307,35 @@
 
                 const data = await response.json();
 
-                if (response.ok) {
+                if (response.ok && data && data.token) {
                     // Extract token from response
                     let token = data.token || '';
                     if (token.startsWith('Bearer ')) {
                         token = token.substring(7);
                     }
 
-                    showAlert('successAlert', '✅ Login successful! Redirecting...', 'success');
+                    // Store token in localStorage BEFORE redirect
+                    localStorage.setItem('jwtToken', token);
+                    localStorage.setItem('username', username);
 
                     // Display token info
                     document.getElementById('tokenDisplay').textContent = token;
                     document.getElementById('tokenInfo').style.display = 'block';
 
-                    // Store token in localStorage
-                    localStorage.setItem('jwtToken', token);
-                    localStorage.setItem('username', username);
+                    showAlert('successAlert', '✅ Login successful! Redirecting...', 'success');
 
                     // Clear form
                     document.getElementById('loginUsername').value = '';
                     document.getElementById('loginPassword').value = '';
 
-                    // Redirect to dashboard after 1 second
+                    // Redirect to dashboard after 1.5 seconds
                     setTimeout(() => {
+                        console.log('Redirecting to dashboard...');
                         window.location.href = '/dashboard.html';
-                    }, 1000);
+                    }, 1500);
                 } else {
-                    showAlert('errorAlert', '❌ Login failed: Invalid username or password', 'error');
+                    const errorMsg = data?.message || 'Invalid username or password';
+                    showAlert('errorAlert', `❌ Login failed: ${errorMsg}`, 'error');
                 }
             } catch (error) {
                 showAlert('errorAlert', `❌ Error: ${error.message}`, 'error');

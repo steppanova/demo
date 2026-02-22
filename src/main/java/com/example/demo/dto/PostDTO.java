@@ -3,16 +3,18 @@ package com.example.demo.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.Set;
 
 @Data
-public class UserDTO {
+public class PostDTO {
 
     private Long id;
     @NotEmpty
-    private String firstname;
+    private String title;
     @NotEmpty
-    private String lastname;
+    private String caption;
     @NotEmpty
     private String username;
-    private String bio;
+    private Integer likes;
+    private Set<String> usersliked;
 }
